@@ -20,13 +20,13 @@ interface ClusterCardProps {
  *  Multi-angle clusters get a hover-triggered coverflow carousel. */
 export default function ClusterCard({ cluster, onClick, onHoverPrefetch }: ClusterCardProps) {
   const first = cluster.clips[0];
-  const displayName = first?.label || first?.filename || "";
-  const angleCount = cluster.clips.length;
-  const hasCarousel = angleCount > 1;
-  const hasTranscript = Boolean(cluster.transcription);
 
   const [isHovered, setIsHovered] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
+
+  const angleCount = cluster.clips.length;
+  const hasCarousel = angleCount > 1;
+  const hasTranscript = Boolean(cluster.transcription);
 
   useEffect(() => {
     if (!hasCarousel || !isHovered) return;
@@ -35,6 +35,10 @@ export default function ClusterCard({ cluster, onClick, onHoverPrefetch }: Clust
     }, CAROUSEL_INTERVAL_MS);
     return () => clearInterval(id);
   }, [hasCarousel, isHovered, cluster.clips.length]);
+
+  if (!first) return null;
+
+  const displayName = first.label || first.filename;
 
   const handleMouseEnter = () => {
     setIsHovered(true);
