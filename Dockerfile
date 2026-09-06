@@ -1,5 +1,5 @@
 # ---- Base image ----
-FROM node:20-alpine AS base
+FROM node:20-slim AS base
 
 # ---- Dependencies stage ----
 FROM base AS deps
@@ -30,8 +30,8 @@ ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
 # Create a non-root user for security
-RUN addgroup --system --gid 1001 nodejs \
-  && adduser --system --uid 1001 nextjs
+RUN groupadd --system --gid 1001 nodejs \
+  && useradd --system --uid 1001 --gid nodejs nextjs
 
 # Copy only what's needed to run the app
 COPY --from=builder /app/public ./public
