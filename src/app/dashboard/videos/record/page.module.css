@@ -1,0 +1,571 @@
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 20px 64px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.agentBadge {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  padding: 4px 12px;
+  border-radius: 999px;
+  color: var(--fg-muted);
+  background: color-mix(in srgb, var(--fg) 8%, transparent);
+}
+
+.agentBadge[data-status="connected"] {
+  color: #24b89e;
+  background: rgba(53, 208, 181, 0.14);
+}
+
+.agentBadge[data-status="connecting"] {
+  color: #d9a441;
+  background: rgba(217, 164, 65, 0.14);
+}
+
+.agentBadge[data-status="disconnected"],
+.agentBadge[data-status="error"] {
+  color: var(--error);
+  background: color-mix(in srgb, var(--error) 12%, transparent);
+}
+
+/* ---- Camera assignment panel ---- */
+
+.assignPanel {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 16px 18px;
+  margin-bottom: 24px;
+}
+
+.assignTitle {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 6px;
+}
+
+.assignHint {
+  font-size: 13px;
+  color: var(--fg-muted);
+  margin: 0 0 14px;
+  line-height: 1.45;
+}
+
+.assignGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.assignRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--fg) 4%, transparent);
+}
+
+.assignCamName {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--fg);
+}
+
+.assignButtons {
+  display: flex;
+  gap: 6px;
+}
+
+.assignBtn {
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.assignBtn:hover:not(:disabled) {
+  background: var(--accent-soft);
+}
+
+.assignBtn:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.assignBtn:disabled {
+  opacity: 0.4;
+  cursor: default;
+  border-color: var(--card-border);
+  color: var(--fg-muted);
+}
+
+/* ---- Stage (reuses the same dark "vanity mirror" tone as TakeDetail) ---- */
+
+.stage {
+  position: relative;
+  overflow: hidden;
+  margin: 0;
+  padding: 40px 32px;
+  border-radius: 24px;
+  background: radial-gradient(120% 140% at 50% 0%, #1c1d23 0%, #101114 65%, #0a0b0d 100%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.grid {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.slot {
+  flex: 1 1 0;
+  min-width: 220px;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.slotLabel {
+  display: block;
+  width: 100%;
+  margin-bottom: 12px;
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.feedBox {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #050506;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow:
+    0 24px 48px -20px rgba(0, 0, 0, 0.7),
+    inset 0 0 0 6px rgba(8, 8, 10, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feedEmptyText {
+  margin: 0;
+  padding: 20px;
+  text-align: center;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.32);
+}
+
+.feedPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 13px;
+  background: repeating-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.03) 0 10px,
+    rgba(255, 255, 255, 0.015) 10px 20px
+  );
+}
+
+.feedLivePill {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.reassignBtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(10, 10, 12, 0.55);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 11px;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+}
+
+.reassignBtn:hover {
+  background: rgba(220, 53, 69, 0.85);
+  border-color: rgba(220, 53, 69, 0.9);
+  color: #fff;
+}
+
+/* ---- Controls ---- */
+
+.controlsRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.recordBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(155deg, #ff5f5f, #e23e3e);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 14px -3px rgba(226, 62, 62, 0.5);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.recordBtn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px -3px rgba(226, 62, 62, 0.65);
+}
+
+.recordBtn:disabled {
+  opacity: 0.5;
+  cursor: default;
+  box-shadow: none;
+  transform: none;
+}
+
+.stopBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  border-radius: 999px;
+  border: 1px solid var(--card-border);
+  background: transparent;
+  color: var(--fg);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.stopBtn:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--fg) 8%, transparent);
+}
+
+.stopBtn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.countdownLabel {
+  font-size: 13px;
+  color: var(--fg-muted);
+  font-weight: 500;
+}
+
+/* ---- Teleprompter monitor (bottom panel with font/speed controls) ---- */
+
+.prompterMonitor {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+
+.prompterMonitorHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.boxTitleSmall {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--fg-muted);
+  margin: 0;
+}
+
+.openPrompterBtn {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.openPrompterBtn:hover {
+  background: var(--accent-soft);
+}
+
+.prompterProgress {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--fg-muted);
+}
+
+.prompterProgressBar {
+  height: 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--fg) 10%, transparent);
+  overflow: hidden;
+}
+
+.prompterProgressFill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #35d0b5, #24b89e);
+  transition: width 0.15s linear;
+}
+
+@media (max-width: 700px) {
+  .contentGrid {
+    grid-template-columns: 1fr;
+  }
+  .telePreviewFloating {
+    order: -1; /* show above the camera stage on narrow screens */
+    max-width: 340px;
+    margin: 0 auto 20px;
+  }
+  .grid {
+    flex-direction: column;
+    align-items: center;
+  }
+  .slot {
+    max-width: 420px;
+    width: 100%;
+  }
+}
+
+.prompterMonitorBody {
+  display: flex;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.prompterMonitorLeft {
+  flex: 1 1 40%;
+  min-width: 0;
+}
+
+.prompterPreview {
+  flex: 1 1 60%;
+  max-height: 160px;
+  overflow-y: auto;
+  padding: 12px 16px;
+  background: #000;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.prompterPreviewLine {
+  padding: 2px 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.35);
+  white-space: pre-wrap;
+}
+
+.prompterPreviewLineActive {
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ---- Content grid: main column (header/assign/stage) + a dedicated
+   column for the teleprompter monitor, top-right of the page. Using a
+   real grid column (rather than floating/absolute positioning) means the
+   layout always reserves its space — it can never render on top of the
+   camera feeds or the header. ---- */
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  align-items: start;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.mainColumn {
+  min-width: 0; /* lets the camera grid shrink instead of overflowing */
+}
+
+.telePreviewFloating {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.telePreviewBox {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  max-height: 320px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #050506;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow:
+    0 24px 48px -20px rgba(0, 0, 0, 0.7),
+    inset 0 0 0 6px rgba(8, 8, 10, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.telePreviewScroll {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  scrollbar-width: none;
+}
+
+.telePreviewScroll::-webkit-scrollbar {
+  display: none;
+}
+
+.telePreviewLine {
+  text-align: center;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: #fff;
+  transition: opacity 0.2s ease, font-weight 0.2s ease;
+}
+
+.telePreviewBox .feedLivePill {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+/* ---- Font size + speed controls ---- */
+
+.prompterControlsRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 28px;
+  margin: 12px 0 14px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--fg) 4%, transparent);
+}
+
+.prompterControlGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.prompterControlLabel {
+  font-size: 11.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--fg-muted);
+  white-space: nowrap;
+}
+
+.fontStepper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fontStepBtn {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.fontStepBtn:hover:not(:disabled) {
+  background: var(--accent-soft);
+}
+
+.fontStepBtn:active:not(:disabled) {
+  transform: scale(0.94);
+}
+
+.fontStepBtn:disabled {
+  opacity: 0.4;
+  cursor: default;
+  border-color: var(--card-border);
+  color: var(--fg-muted);
+}
+
+.fontStepValue {
+  min-width: 44px;
+  text-align: center;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--fg-muted);
+}
+
+.speedSlider {
+  width: 140px;
+  accent-color: #24b89e;
+  cursor: pointer;
+}

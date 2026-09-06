@@ -1,0 +1,55 @@
+.toggleWrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 999px;
+  background: var(--toggle-track);
+  border: 1px solid var(--toggle-border);
+}
+
+.toggleBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--toggle-fg-muted);
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.toggleBtn:hover {
+  color: var(--toggle-fg);
+}
+
+.toggleBtn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.toggleBtn.active {
+  background: var(--toggle-active-bg);
+  color: var(--toggle-active-fg);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.icon {
+  flex-shrink: 0;
+}
+
+/* Below 480px, collapse to icon-only so the header stays tidy on phones */
+@media (max-width: 480px) {
+  .toggleLabel {
+    display: none;
+  }
+
+  .toggleBtn {
+    padding: 7px;
+  }
+}

@@ -1,0 +1,509 @@
+.dashboardTop {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-bottom: 2rem;
+}
+
+.statusText {
+  color: var(--fg-muted);
+  font-size: 0.95rem;
+}
+
+.error {
+  color: var(--error);
+  font-size: 0.9rem;
+}
+
+/* Filter bar */
+.filterBar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.pageTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--fg);
+}
+
+.dateFilters {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.dateField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  color: var(--fg-muted);
+}
+
+.dateInput {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+  color: var(--fg);
+  font-size: 0.9rem;
+}
+
+/* Hero stat row — now holds all 6 top-line stats (4 raw totals +
+   2 derived editing metrics) so no tile sits alone in its own card. */
+.heroRow {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 1100px) {
+  .heroRow {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .heroRow {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.statTile {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 1.25rem 1.25rem;
+}
+
+.statValue {
+  font-size: 1.7rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem;
+  color: var(--fg);
+  line-height: 1.1;
+}
+
+.statLabel {
+  font-size: 0.82rem;
+  color: var(--fg-muted);
+  margin: 0;
+}
+
+/* Section card */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 1.75rem;
+}
+
+.sectionTitle {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0 0 1.25rem;
+  color: var(--fg);
+}
+
+.twoCol {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 800px) {
+  .twoCol {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Search bar — used above the Sign person productivity table and the
+   Clips by editor chart. */
+.searchBar {
+  margin-bottom: 1rem;
+}
+
+.searchInput {
+  width: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.88rem;
+  color: var(--fg);
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.searchInput::placeholder {
+  color: var(--fg-muted);
+}
+
+/* Data table (sign-person rows) */
+.dataTable {
+  display: flex;
+  flex-direction: column;
+}
+
+.sortableHeader {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.sortableHeader:hover {
+  color: var(--fg);
+}
+
+.sortIndicator {
+  font-size: 0.65rem;
+  color: var(--accent);
+  min-width: 0.7rem;
+  display: inline-block;
+}
+
+.dataRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--card-border);
+  font-size: 0.9rem;
+  color: var(--fg);
+}
+
+.dataRow:last-child {
+  border-bottom: none;
+}
+
+.dataRowHead {
+  color: var(--fg-muted);
+  font-size: 0.75rem;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.dataValue {
+  font-weight: 600;
+  color: var(--fg);
+}
+
+/* Storage bar chart */
+.barChart {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.barRow {
+  display: grid;
+  grid-template-columns: 150px 1fr 90px;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.barLabel {
+  font-size: 0.85rem;
+  color: var(--fg-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.barTrack {
+  height: 10px;
+  border-radius: 5px;
+  background: var(--card-border);
+  overflow: hidden;
+}
+
+.barFill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 5px;
+}
+
+.barValue {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--fg);
+  text-align: right;
+}
+
+@media (max-width: 500px) {
+  .barRow {
+    grid-template-columns: 100px 1fr 70px;
+  }
+}
+
+/* ---------------------------------------------------------- */
+/* Vertical bar chart — used for "Recording session by         */
+/* Organizations". Horizontally scrollable so many categories   */
+/* don't get squeezed.                                          */
+/* ---------------------------------------------------------- */
+.vBarScrollOuter {
+  width: 100%;
+  overflow: hidden;
+}
+
+.vBarScroll {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.5rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0 0.25rem 0.5rem;
+  scrollbar-width: thin;
+}
+
+.vBarScroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.vBarScroll::-webkit-scrollbar-thumb {
+  background: var(--card-border);
+  border-radius: 3px;
+}
+
+.vBarItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 0 0 auto;
+  width: 64px;
+}
+
+.vBarValue {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--fg);
+  margin-bottom: 0.4rem;
+  white-space: nowrap;
+}
+
+.vBarTrack {
+  width: 28px;
+  height: 120px;
+  border-radius: 6px 6px 3px 3px;
+  background: var(--card-border);
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.vBarFill {
+  width: 100%;
+  background: var(--accent);
+  border-radius: 6px 6px 0 0;
+  min-height: 2px;
+  transition: height 0.2s ease;
+}
+
+.vBarLabel {
+  margin-top: 0.6rem;
+  font-size: 0.78rem;
+  color: var(--fg-muted);
+  text-align: center;
+  max-width: 72px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------- */
+/* Clips by editor — F1-style horizontal bar chart with        */
+/* avatar/initial icons on the left. Colors are drawn only     */
+/* from --accent (opacity-shaded by rank) to stay on-palette.  */
+/* Now lives in a full-width card, so rows are allowed to      */
+/* stretch and the track gets noticeably wider/more legible.   */
+/* ---------------------------------------------------------- */
+.editorChart {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.editorRow {
+  display: grid;
+  grid-template-columns: 20px 34px 160px 1fr 48px;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.editorRank {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--fg-muted);
+  text-align: right;
+}
+
+.editorAvatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+.editorName {
+  font-size: 0.88rem;
+  color: var(--fg);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.editorTrack {
+  height: 14px;
+  border-radius: 7px;
+  background: var(--card-border);
+  overflow: hidden;
+}
+
+.editorFill {
+  height: 100%;
+  border-radius: 7px;
+  min-width: 4px;
+  background: var(--accent);
+  transition: width 0.2s ease;
+}
+
+.editorValue {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--fg);
+  text-align: right;
+}
+
+@media (max-width: 600px) {
+  .editorRow {
+    grid-template-columns: 16px 28px 90px 1fr 34px;
+    gap: 0.5rem;
+  }
+
+  .vBarTrack {
+    height: 100px;
+  }
+}
+
+/* Storage footprint — no more hard max-width cap; it now fills      */
+/* whichever half of the two-column row it sits in.                  */
+.storageChart {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+}
+.storageStackBar {
+  display: flex;
+  width: 100%;
+  height: 22px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--surface-muted, #eee);
+}
+.storageSegment {
+  height: 100%;
+}
+.storageLegend {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.storageLegendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+.storageLegendSwatch {
+  width: 9px;
+  height: 9px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+.storageLegendLabel {
+  width: 150px;
+  color: var(--text-secondary, #666);
+}
+.storageLegendValue {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* View angle donut — no more hard max-width cap; the ring stays a    */
+/* fixed comfortable size while the legend is free to use the rest    */
+/* of the card's width instead of leaving a dead margin.              */
+.donutChart {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+}
+.donutRing {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.donutHole {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: var(--surface, #1a1a1a);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.donutTotal {
+  font-size: 17px;
+  font-weight: 700;
+}
+.donutTotalLabel {
+  font-size: 11px;
+  color: var(--text-secondary, #888);
+}
+.donutLegend {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+.donutLegendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+.donutLegendSwatch {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.donutLegendLabel {
+  width: 60px;
+  color: var(--text-secondary, #888);
+}
+.donutLegendValue {
+  font-weight: 600;
+  white-space: nowrap;
+}

@@ -1,0 +1,268 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 28px;
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--header-border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.pageTitle {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--fg);
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.profileWrap {
+  position: relative;
+}
+
+.profileBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px 4px 4px;
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  background: var(--card-bg);
+  cursor: pointer;
+  color: var(--fg-muted);
+  transition: border-color 0.15s ease;
+}
+
+.profileBtn:hover {
+  border-color: var(--accent);
+}
+
+.avatarSm {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-fg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.chevron {
+  transition: transform 0.15s ease;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 220px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  padding: 8px;
+  z-index: 20;
+}
+
+.dropdownUserInfo {
+  padding: 8px 10px 10px;
+}
+
+.dropdownName {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.dropdownEmail {
+  margin: 2px 0 0;
+  font-size: 0.78rem;
+  color: var(--fg-muted);
+  word-break: break-word;
+}
+
+.dropdownDivider {
+  height: 1px;
+  background: var(--card-border);
+  margin: 4px 0;
+}
+
+.dropdownItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 10px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  color: var(--error);
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.dropdownItem:hover {
+  background: var(--accent-soft);
+}
+
+.roleBadge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--accent-muted, rgba(99, 102, 241, 0.15));
+  color: var(--accent, #6366f1);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.dropdownRole {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--accent-muted, rgba(99, 102, 241, 0.15));
+  color: var(--accent, #6366f1);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  width: fit-content;
+}
+
+.newSessionBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  background: var(--accent);
+  color: var(--accent-fg);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.newSessionBtn:hover {
+  opacity: 0.9;
+}
+
+.newSessionBtn:active {
+  opacity: 0.8;
+}
+
+/* Modal */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  width: 90%;
+  max-width: 480px;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.modalTitle {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.modalCloseBtn {
+  background: none;
+  border: none;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--fg-muted);
+  cursor: pointer;
+  padding: 4px;
+}
+
+.modalCloseBtn:hover {
+  color: var(--fg);
+}
+
+.modalBody {
+  padding: 20px;
+  color: var(--fg-muted);
+  font-size: 14px;
+}
+
+.newSessionWrap {
+  position: relative;
+}
+
+.newSessionDropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 220px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  padding: 8px;
+  z-index: 20;
+}
+
+.newSessionOption {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 10px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  color: var(--fg);
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease;
+}
+
+.newSessionOption:hover {
+  background: var(--accent-soft);
+}

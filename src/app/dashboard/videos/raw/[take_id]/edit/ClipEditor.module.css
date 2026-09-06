@@ -1,0 +1,1796 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.5rem 2rem 3rem;
+  color: #e8e8ec;
+}
+
+.backBtn {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  color: #9a9aa5;
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: 0.25rem 0;
+}
+.backBtn:hover {
+  color: #e8e8ec;
+}
+
+.statusText {
+  color: #9a9aa5;
+}
+
+.errorText {
+  color: #f26d6d;
+  font-size: 0.875rem;
+}
+
+.emptyText {
+  color: #7d7d88;
+  font-size: 0.875rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.sectionTitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  color: #cfcfd6;
+}
+
+/* =========================================================================
+   Two-column editor shell
+   Left: mirror stage + clip actions + master transport.
+   Right: scrollable clip sidebar (see "Clip sidebar" section below).
+   ========================================================================= */
+
+.editorLayout {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.mainColumn {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* =========================================================================
+   Three-panel "vanity mirror" video layout
+   Left / Right panels angle inward toward the Front panel like a real
+   three-way mirror — fitting, since the angles literally are left/front/right.
+   Ported from TakeDetail's mirror stage; class names here keep this page's
+   existing previewCard/previewVideo/angleLabel naming instead of TakeDetail's
+   videoCard/videoPlayer, and the delete/add-video affordances are dropped
+   since this page doesn't own upload/delete — it's read-only preview + trim.
+   ========================================================================= */
+
+.mirrorStage {
+  --mirror-accent: #35d0b5;
+  --panel-gap: 28px;
+  position: relative;
+  overflow: hidden;
+  padding: 56px 40px 52px;
+  border-radius: 24px;
+  background: radial-gradient(120% 140% at 50% 0%, #1c1d23 0%, #101114 65%, #0a0b0d 100%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.videoGrid {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: var(--panel-gap);
+  perspective: 1500px;
+  perspective-origin: 50% 50%;
+  transform-style: preserve-3d;
+}
+
+.previewCard {
+  position: relative;
+  flex: 1 1 0;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform-style: preserve-3d;
+  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.35, 1), filter 0.4s ease;
+}
+
+/* Fold the outer panels forward around their hinge with the front panel —
+   like actually sitting inside a three-way mirror: the wings wrap toward
+   you at the outer edge while staying joined to the center panel.
+   Driven by data-slot (the video's logical left/front/right position)
+   rather than DOM child order, so a take with only 1 or 2 videos still
+   renders each one flat/tilted in its correct designated spot instead of
+   the remaining card(s) inheriting a combined/wrong rotation. */
+.previewCard[data-slot="left"] {
+  transform: rotateY(20deg);
+  transform-origin: right center;
+}
+
+.previewCard[data-slot="right"] {
+  transform: rotateY(-20deg);
+  transform-origin: left center;
+}
+
+.previewCard[data-slot="front"],
+.previewCard[data-slot="extra"] {
+  transform: translateZ(50px);
+  z-index: 1;
+}
+
+.previewCard[data-slot="left"] .videoStage,
+.previewCard[data-slot="right"] .videoStage {
+  filter: brightness(0.96);
+}
+
+.previewCard:hover {
+  transform: rotateY(0deg) translateZ(46px) !important;
+  z-index: 3;
+}
+
+.previewCard:hover .videoStage {
+  filter: brightness(1) !important;
+}
+
+/* Soft contact shadow grounding the group as one folded object */
+.videoGrid::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -18px;
+  width: 70%;
+  height: 40px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.55), transparent 70%);
+  transform: translateX(-50%) translateZ(-80px);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Hinge mark between adjoining panels, like a mirror's fold joint.
+   Positioned at exactly half the flex gap (--panel-gap, shared with
+   .videoGrid) so it always sits centered between two panels regardless
+   of how the gap size changes, instead of a hand-tuned pixel offset. */
+.previewCard[data-slot="left"]::after,
+.previewCard[data-slot="front"]::after {
+  content: "";
+  position: absolute;
+  top: 38%;
+  bottom: 18%;
+  right: calc(var(--panel-gap) / -2 - 1px);
+  width: 2px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(255, 255, 255, 0.18) 15%,
+    rgba(255, 255, 255, 0.18) 85%,
+    transparent
+  );
+}
+
+.previewCard[data-slot="left"]::before,
+.previewCard[data-slot="front"]::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: calc(var(--panel-gap) / -2 - 4px);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.04);
+  transform: translateY(-50%);
+}
+
+/* ---- Plaque-style label, centered above its panel ---- */
+
+.angleLabel {
+  display: block;
+  width: 100%;
+  margin-bottom: 12px;
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.angleLabel::after {
+  content: "";
+  display: block;
+  width: 22px;
+  height: 2px;
+  margin: 7px auto 0;
+  border-radius: 999px;
+  background: var(--mirror-accent);
+  opacity: 0.85;
+}
+
+/* ---- The glass panel itself ---- */
+
+.videoStage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #050506;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow:
+    0 24px 48px -20px rgba(0, 0, 0, 0.7),
+    inset 0 0 0 6px rgba(8, 8, 10, 0.9),
+    inset 0 0 24px rgba(0, 0, 0, 0.55);
+}
+
+.previewVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  background: #050506;
+}
+
+/* Faint diagonal glass sheen, purely decorative, never blocks the controls */
+.videoGloss {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.03) 18%,
+    transparent 34%
+  );
+  mix-blend-mode: overlay;
+}
+
+/* ---- Empty slot placeholder (no video for this angle yet) ---- */
+
+.previewCardEmpty .angleLabel {
+  opacity: 0.55;
+}
+
+.previewCardEmpty .videoStage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.012);
+  border-style: dashed;
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: none;
+}
+
+.emptySlotInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 20px;
+}
+
+.emptySlotText {
+  margin: 0;
+  text-align: center;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.32);
+}
+
+/* ---- Responsive: stack, drop the fold/hinge on narrow screens ---- */
+
+@media (max-width: 900px) {
+  .mirrorStage {
+    padding: 28px 18px;
+  }
+
+  .videoGrid {
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    perspective: none;
+  }
+
+  .previewCard,
+  .previewCard:hover {
+    max-width: 480px;
+    width: 100%;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .previewCard::after,
+  .previewCard::before {
+    display: none;
+  }
+
+  .previewCard .videoStage,
+  .previewCard:hover .videoStage {
+    filter: none !important;
+  }
+
+  .videoGrid::after {
+    display: none;
+  }
+
+  .videoStage {
+    aspect-ratio: 16 / 10;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .previewCard {
+    transition: none;
+  }
+}
+
+/* =========================================================================
+   Clip sidebar — right-hand column, scrollable list of clips already
+   created on this take. Sticky so it stays in view while the main column
+   scrolls. Each card's --clip-color accent matches its marker on the
+   master timeline in the main column, so the two are visually tied
+   together even though they're far apart in the layout.
+   ========================================================================= */
+
+.clipSidebar {
+  flex: 0 0 300px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: sticky;
+  top: 1.5rem;
+  height: calc(100vh - 3rem);
+  overflow: hidden;
+  transition: flex-basis 0.2s ease, width 0.2s ease;
+}
+
+/* Collapsed: slim rail with just the toggle button (+ a count badge if
+   there are clips). The card list itself isn't rendered while collapsed
+   (see the component), so this is purely a width change. */
+.clipSidebarCollapsed {
+  flex: 0 0 52px;
+  width: 52px;
+}
+
+.clipSidebarHeader {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+.clipSidebarCollapsed .clipSidebarHeader {
+  justify-content: center;
+  align-items: center;
+}
+
+.clipSidebarHeader .sectionTitle {
+  margin: 0;
+}
+
+.clipStripCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.68rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.sidebarCollapseBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  flex: 0 0 auto;
+  margin-left: auto;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.sidebarCollapseBtn:hover {
+  background: rgba(53, 208, 181, 0.14);
+  border-color: rgba(53, 208, 181, 0.5);
+  color: #a9f2e4;
+}
+
+.sidebarCollapseBtn:focus-visible {
+  outline: 2px solid #35d0b5;
+  outline-offset: 2px;
+}
+
+.clipSidebarCollapsed .sidebarCollapseBtn {
+  margin-left: 0;
+}
+
+.clipStripCountCollapsed {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 8px auto 0;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.7rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.clipStripEmpty {
+  margin: 4px 0 0;
+  font-size: 0.82rem;
+  color: #7d7d88;
+}
+
+/* The actual scroll region. Critically needs flex-grow + min-height: 0 —
+   without min-height: 0 a flex child defaults to min-height: auto (its
+   content's height), which stops it from ever shrinking to fit the
+   parent's fixed height. That meant overflow-y: auto never had a reason
+   to kick in: the list just grew past the sidebar's height uncontrolled
+   instead of scrolling, cutting off any card beyond the first one or two
+   depending on viewport height. */
+.clipSidebarScroll {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 2px 4px 10px 2px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
+
+.clipSidebarScroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.clipSidebarScroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.clipSidebarScroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+}
+
+/* ---- Individual group card (one per clip_group_id) ---- */
+
+.groupCard {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.015));
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.groupCard:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.groupCard:focus-visible {
+  outline: 2px solid var(--clip-color, #35d0b5);
+  outline-offset: 2px;
+}
+
+.groupCardSelected {
+  border-color: var(--clip-color, #35d0b5);
+  background: color-mix(in srgb, var(--clip-color, #35d0b5) 10%, transparent);
+  box-shadow: 0 0 0 1px var(--clip-color, #35d0b5) inset;
+}
+
+/* =========================================================================
+   Mini angle carousel inside a group card — shows one angle's clip at a
+   time (larger and clearer than the old three-up mirror), with prev/next
+   arrows and dot indicators to switch between left/front/right and any
+   additional angles beyond those three. Clicking the panel itself plays
+   or pauses just that clip, inline, without touching the master
+   3-plane player or its timeline.
+   ========================================================================= */
+
+.miniMirrorStage {
+  position: relative;
+  width: 100%;
+  padding: 14px 12px 6px;
+}
+
+.miniCarousel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.miniNavBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.miniNavBtn:hover:not(:disabled) {
+  background: rgba(53, 208, 181, 0.14);
+  border-color: rgba(53, 208, 181, 0.5);
+  color: #a9f2e4;
+}
+
+.miniNavBtn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.miniNavBtn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.miniStageWrap {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 200px;
+}
+
+.miniStagePanel {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  min-height: 150px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #050506;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 10px 22px -12px rgba(0, 0, 0, 0.65);
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.miniStagePanel:hover {
+  border-color: var(--clip-color, #35d0b5);
+}
+
+.miniStagePanel:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.miniStagePanelEmpty {
+  cursor: default;
+  border-style: dashed;
+  box-shadow: none;
+}
+
+.miniStagePanelEmpty:hover {
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.miniVideoStage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.miniVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  background: #050506;
+  pointer-events: none;
+}
+
+.miniEmptyText {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  text-align: center;
+  font-size: 0.62rem;
+  line-height: 1.3;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.miniAngleLabel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 4px 4px;
+  text-align: center;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.85);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.75), transparent);
+  pointer-events: none;
+}
+
+/* Small play/pause glyph — purely a visual affordance layered on top; the
+   panel itself (not this element) owns the click handler, so this stays
+   pointer-events:none and just fades in on hover or while that specific
+   clip is actually playing. */
+.miniPlayHint {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 11, 13, 0.6);
+  color: #fff;
+  backdrop-filter: blur(1.5px);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+}
+
+.miniPlayHint svg {
+  width: 13px;
+  height: 13px;
+}
+
+.miniStagePanel:hover .miniPlayHint,
+.miniPlayHintPlaying {
+  opacity: 1;
+}
+
+/* ---- Dot indicators, one per angle, below the panel ---- */
+
+.miniDots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.miniDot {
+  width: 6px;
+  height: 6px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.miniDot:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.miniDot:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.miniDotActive {
+  background: var(--clip-color, #35d0b5);
+  transform: scale(1.35);
+}
+
+/* ---- Label + time meta ---- */
+
+.groupMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px 10px 4px;
+}
+
+/* Row that holds the label/time block on the left and the delete button
+   on the right — kept separate from .groupMeta itself so .groupMeta can
+   still stack additional rows (like the delete error text) beneath it. */
+.groupMetaRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.groupMetaText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.groupLabel {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #e8e8ec;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.groupTime {
+  font-size: 0.7rem;
+  font-variant-numeric: tabular-nums;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* ---- Delete (trash) button ----
+   Neutral by default, only turning the page's error-red on hover/focus so
+   a row of cards doesn't read as alarmingly red at rest. Sized to match
+   the sidebar's other icon-only affordances (.cancelClipBtn). */
+.deleteGroupBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.deleteGroupBtn:hover:not(:disabled) {
+  background: rgba(242, 109, 109, 0.12);
+  border-color: rgba(242, 109, 109, 0.5);
+  color: #f26d6d;
+}
+
+.deleteGroupBtn:focus-visible {
+  outline: 2px solid #f26d6d;
+  outline-offset: 2px;
+}
+
+.deleteGroupBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinIcon {
+  animation: spin 0.7s linear infinite;
+}
+
+/* ---- Transcription footer ---- */
+
+.groupFooter {
+  padding: 6px 10px 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  margin-top: 4px;
+}
+
+/* Row that holds the transcription text (or its muted placeholder) plus
+   the edit (pencil) button. Kept as its own row so the button aligns to
+   the transcription's first line rather than sitting under it. */
+.groupFooterRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.groupTranscription {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  font-size: 0.72rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.65);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.groupTranscriptionMuted {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.32);
+  font-style: italic;
+}
+
+/* ---- Edit (pencil) button ----
+   Shared by the sidebar card's footer and the timeline marker's tooltip.
+   Neutral by default, teal on hover/focus to match the page's accent —
+   distinct from the delete button's red so "edit" and "delete" never read
+   as the same kind of action. */
+.editTranscriptionBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.editTranscriptionBtn:hover {
+  background: rgba(53, 208, 181, 0.14);
+  border-color: rgba(53, 208, 181, 0.5);
+  color: #a9f2e4;
+}
+
+.editTranscriptionBtn:focus-visible {
+  outline: 2px solid #35d0b5;
+  outline-offset: 2px;
+}
+
+/* ---- Inline transcription editor ----
+   Replaces the read-only paragraph (in either the sidebar footer or the
+   timeline tooltip) while a clip's transcription is being edited. Shares
+   styling with the draft clip's .clipTranscriptionInput so it reads as
+   the same kind of control. */
+.transcriptionEditBox {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  cursor: default;
+}
+
+.transcriptionEditInput {
+  width: 100%;
+  resize: vertical;
+  min-height: 52px;
+  padding: 7px 9px;
+  border-radius: 9px;
+  border: 1px solid rgba(53, 208, 181, 0.4);
+  background: rgba(255, 255, 255, 0.05);
+  color: #e8e8ec;
+  font-size: 0.74rem;
+  line-height: 1.4;
+  font-family: inherit;
+}
+
+.transcriptionEditInput:focus {
+  outline: none;
+  border-color: rgba(53, 208, 181, 0.65);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.transcriptionEditInput:disabled {
+  opacity: 0.6;
+}
+
+.transcriptionEditActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.transcriptionCancelBtn {
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.68rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.transcriptionCancelBtn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  color: #e8e8ec;
+}
+
+.transcriptionCancelBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.transcriptionSaveBtn {
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(155deg, #35d0b5, #24b89e);
+  color: #0a0f0e;
+  font-size: 0.68rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+.transcriptionSaveBtn:hover:not(:disabled) {
+  transform: scale(1.03);
+  box-shadow: 0 4px 12px -4px rgba(53, 208, 181, 0.6);
+}
+
+.transcriptionSaveBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* =========================================================================
+   "+ Clip" action row — sits directly below the mirror stage, right
+   aligned. Flips between the idle "+ Clip" button and a Cancel/Done pair
+   while a clip is being drafted.
+   ========================================================================= */
+
+.clipActionsRow {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.addClipBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(53, 208, 181, 0.4);
+  background: rgba(53, 208, 181, 0.08);
+  color: #a9f2e4;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+}
+
+.addClipBtn:hover:not(:disabled) {
+  background: rgba(53, 208, 181, 0.16);
+  border-color: rgba(53, 208, 181, 0.65);
+}
+
+.addClipBtn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.addClipBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.clipActionsGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cancelClipBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.cancelClipBtn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  color: #e8e8ec;
+}
+
+.cancelClipBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.doneClipBtn {
+  padding: 8px 20px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(155deg, #35d0b5, #24b89e);
+  color: #0a0f0e;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px -4px rgba(53, 208, 181, 0.55);
+  transition: transform 0.1s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+.doneClipBtn:hover:not(:disabled) {
+  transform: scale(1.03);
+  box-shadow: 0 6px 18px -4px rgba(53, 208, 181, 0.7);
+}
+
+.doneClipBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* =========================================================================
+   Master control bar
+   Transparent, boxless, music-player style strip below the mirror stage,
+   driving all videos at once. No background/border/shadow of its own —
+   only the buttons and sliders are visible against the page. The
+   play/pause button sits big and centered, with restart/back-10 to its
+   left and forward-10/mute/volume to its right, like an old media player.
+   Teal accent ties it visually to the mirror stage above.
+   ========================================================================= */
+
+.masterControls {
+  --mc-accent: #35d0b5;
+  --mc-accent-strong: #24b89e;
+  --mc-track: rgba(255, 255, 255, 0.14);
+  --mc-text: rgba(255, 255, 255, 0.92);
+  --mc-text-dim: rgba(255, 255, 255, 0.5);
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 6px 0 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+  color: var(--mc-text);
+}
+
+/* ---- Row 1: big centered play/pause, other controls flanking it ---- */
+
+.masterControlsRow {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  column-gap: 22px;
+}
+
+.masterTransportLeft {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-self: end;
+}
+
+.masterTransportRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-self: start;
+}
+
+/* ---- Row 2: timeline (current time / seek bar / duration) ---- */
+
+.masterTimeline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 6px 0;
+  transition: padding 0.15s ease;
+}
+
+/* Wraps the native seek <input> so the clip-range overlay (draft range +
+   handles + already-created clip markers) can be positioned absolutely
+   against exactly the same box the slider occupies. */
+.seekBarWrapper {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 60px;
+  display: flex;
+  align-items: center;
+}
+
+.seekBarWrapper .masterSeekBar {
+  width: 100%;
+}
+
+/* ---- Row 3: keyboard shortcut hints, styled as small key chips in the
+   page's teal accent so they read as "keys" rather than plain text ---- */
+
+.masterShortcutsHint {
+  margin: 2px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.shortcutKey {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  padding: 2px 6px;
+  margin: 0 3px 0 0;
+  border-radius: 6px;
+  border: 1px solid rgba(53, 208, 181, 0.35);
+  background: rgba(53, 208, 181, 0.08);
+  color: #a9f2e4;
+  font-size: 0.68rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  line-height: 1.5;
+}
+
+/* ---- Transport (restart / skip) icon buttons ---- */
+
+.masterIconBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  color: var(--mc-text-dim);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+.masterIconBtn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--mc-text);
+}
+
+.masterIconBtn:active {
+  transform: scale(0.92);
+}
+
+.masterIconBtn:focus-visible {
+  outline: 2px solid var(--mc-accent);
+  outline-offset: 2px;
+}
+
+/* ---- Big centered play/pause ---- */
+
+.masterPlayBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(155deg, var(--mc-accent), var(--mc-accent-strong));
+  color: #0a0f0e;
+  cursor: pointer;
+  box-shadow: 0 6px 20px -4px rgba(53, 208, 181, 0.55);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.masterPlayBtn svg {
+  width: 24px;
+  height: 24px;
+  transform: translateX(1px);
+}
+
+.masterPlayBtn:hover {
+  transform: scale(1.06);
+  box-shadow: 0 8px 24px -4px rgba(53, 208, 181, 0.7);
+}
+
+.masterPlayBtn:active {
+  transform: scale(0.96);
+}
+
+.masterPlayBtn:focus-visible {
+  outline: 2px solid var(--mc-accent);
+  outline-offset: 3px;
+}
+
+/* ---- Timeline (current time / seek bar / duration) ----
+   Stays small/quiet by default; hovering anywhere on the timeline row
+   makes the seek bar thicker and the time labels bold + larger, so it
+   only asserts itself when you're actually about to interact with it. */
+
+.masterTime {
+  flex: 0 0 auto;
+  min-width: 38px;
+  font-size: 0.72rem;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  color: var(--mc-text-dim);
+  text-align: center;
+  transition: font-size 0.15s ease, font-weight 0.15s ease, color 0.15s ease;
+}
+
+.masterTimeline:hover .masterTime {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--mc-text);
+}
+
+/* ---- Volume ---- */
+
+.masterVolumeBar {
+  width: 70px;
+}
+
+/* ---- Shared range slider skin (seek + volume) ---- */
+
+.masterSeekBar,
+.masterVolumeBar {
+  appearance: none;
+  -webkit-appearance: none;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--mc-accent) 0%,
+    var(--mc-accent) var(--fill, 0%),
+    var(--mc-track) var(--fill, 0%),
+    var(--mc-track) 100%
+  );
+  outline: none;
+  cursor: pointer;
+  transition: height 0.15s ease;
+}
+
+.masterSeekBar {
+  flex: 1 1 auto;
+  min-width: 60px;
+}
+
+.masterTimeline:hover .masterSeekBar {
+  height: 7px;
+}
+
+.masterSeekBar::-webkit-slider-thumb,
+.masterVolumeBar::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--mc-accent-strong);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  margin-top: 0;
+}
+
+.masterSeekBar::-moz-range-thumb,
+.masterVolumeBar::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--mc-accent-strong);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.masterSeekBar::-moz-range-track,
+.masterVolumeBar::-moz-range-track {
+  height: 4px;
+  border-radius: 999px;
+  background: transparent;
+}
+
+.masterSeekBar:hover::-webkit-slider-thumb,
+.masterVolumeBar:hover::-webkit-slider-thumb,
+.masterSeekBar:focus-visible::-webkit-slider-thumb,
+.masterVolumeBar:focus-visible::-webkit-slider-thumb {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.masterTimeline:hover .masterSeekBar::-webkit-slider-thumb {
+  width: 15px;
+  height: 15px;
+}
+
+.masterTimeline:hover .masterSeekBar::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+}
+
+.masterSeekBar:hover::-moz-range-thumb,
+.masterVolumeBar:hover::-moz-range-thumb,
+.masterSeekBar:focus-visible::-moz-range-thumb,
+.masterVolumeBar:focus-visible::-moz-range-thumb {
+  opacity: 1;
+}
+
+.masterSeekBar:focus-visible,
+.masterVolumeBar:focus-visible {
+  outline: none;
+}
+
+/* =========================================================================
+   Clip range selector — overlaid on top of the master seek bar, inside
+   .seekBarWrapper so its left/width percentages line up exactly with the
+   slider underneath.
+   ========================================================================= */
+
+/* Already-created clips: thin, solid segments, wrapped in a small
+   positioning box (.clipMarkerWrap) so the hover/focus tooltip below has
+   a stable anchor to sit above, the same way the draft clip's tooltip
+   sits above .clipRangeBar. */
+.clipMarkerWrap {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 10px;
+  display: flex;
+  align-items: center;
+  z-index: 1;
+}
+
+/*
+  Invisible hover "bridge" filling the gap between the marker (10px tall,
+  vertically centered on the seek bar) and the tooltip, which floats
+  `bottom: calc(100% + 10px)` above this wrap. Without this, moving the
+  mouse straight up from the marker toward the tooltip crosses empty
+  space that belongs to neither element — the instant the cursor leaves
+  .clipMarkerWrap, :hover drops and the (pointer-events: none, hidden)
+  tooltip can't catch it again, so it closes before you can reach it.
+  This pseudo-element sits on top of that gap and is part of
+  .clipMarkerWrap, so hovering it keeps the whole group "hovered" and the
+  tooltip open, letting the cursor travel from marker -> bridge -> tooltip
+  without ever losing hover.
+*/
+.clipMarkerWrap::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  transform: translateX(-50%);
+  width: 220px;
+  height: 12px;
+  pointer-events: auto;
+}
+
+.clipMarker {
+  position: relative;
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  border: none;
+  padding: 0;
+  opacity: 0.85;
+  cursor: pointer;
+  transition: height 0.12s ease, opacity 0.12s ease, box-shadow 0.12s ease;
+}
+
+.clipMarker:hover {
+  height: 9px;
+  opacity: 1;
+}
+
+.clipMarker:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.clipMarkerSelected {
+  height: 10px;
+  opacity: 1;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.65);
+}
+
+/* ---- Hover/focus tooltip for an already-created clip ----
+   Same floating-card look as the draft clip's .clipTooltip (color swatch
+   + time + text), but read-only by default — hovering the marker itself,
+   or focusing it via keyboard (Tab), shows it. Editing text is opened via
+   its own pencil button (see .clipMarkerTooltipFooterRow /
+   .editTranscriptionBtn), which swaps the paragraph for
+   .transcriptionEditBox in place. The color dot doubles as a direct
+   color-edit trigger (see .clipMarkerColorSwatch below) — no separate
+   "edit mode" needed there since picking a color is already a single,
+   self-contained action. Stays out of the way (opacity/visibility, not
+   display) so it doesn't shift layout, and pointer-events flip on only
+   while visible.
+
+   Showing is instant (see the hover rule below, which overrides the
+   transition to have no delay) — only HIDING is delayed by 0.25s. That
+   grace period means a brief, accidental cursor slip off the tooltip
+   (e.g. while reaching for the pencil/save button) doesn't instantly
+   close it; the tooltip only actually disappears if the mouse stays away
+   for a quarter second, which is enough time to correct course. Combined
+   with the .clipMarkerWrap::before bridge above, the mouse essentially
+   never loses the tooltip by accident anymore. */
+.clipMarkerTooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 220px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(26, 27, 32, 0.98), rgba(18, 19, 23, 0.98));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.65);
+  cursor: default;
+  z-index: 6;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.15s ease 0.25s, visibility 0s linear 0.25s;
+}
+
+.clipMarkerTooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 7px solid transparent;
+  border-top-color: rgba(18, 19, 23, 0.98);
+}
+
+.clipMarkerWrap:hover .clipMarkerTooltip,
+.clipMarker:focus-visible ~ .clipMarkerTooltip {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.1s ease; /* showing is instant, no hide-delay */
+}
+
+/* Forces the tooltip to stay open/interactive regardless of hover state.
+   Applied (see the component) whenever this marker's clip transcription
+   is actively being edited, so the edit box can never disappear mid-edit
+   even if the cursor drifts away from it while typing — e.g. while
+   looking at the video preview instead of the tooltip. */
+.clipMarkerTooltipPinned {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transition: none !important;
+}
+
+.clipMarkerColorDot {
+  display: block;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Editable variant of the dot above — used once a group has a
+   clip_group_id (i.e. can actually be recolored via the group-color
+   endpoint; legacy/ungrouped clips fall back to the plain read-only dot).
+   Same visual footprint as the read-only dot, but wraps a hidden native
+   color <input> the same way .clipColorSwatch does for the in-progress
+   draft, so clicking it opens the OS color picker directly on the swatch
+   itself — no separate "edit mode" toggle needed. */
+.clipMarkerColorSwatch {
+  position: relative;
+  display: block;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.1s ease, border-color 0.15s ease;
+}
+
+.clipMarkerColorSwatch:hover {
+  transform: scale(1.15);
+  border-color: rgba(255, 255, 255, 0.85);
+}
+
+.clipMarkerColorSwatch:focus-within {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.clipMarkerColorSwatch input[type="color"] {
+  position: absolute;
+  inset: -4px;
+  width: calc(100% + 8px);
+  height: calc(100% + 8px);
+  border: none;
+  padding: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.clipMarkerTooltipLabel {
+  margin: 0 0 6px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #e8e8ec;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Row that holds the tooltip's transcription paragraph plus its edit
+   (pencil) button — mirrors .groupFooterRow so the two surfaces (sidebar
+   card + timeline tooltip) share the same layout. */
+.clipMarkerTooltipFooterRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.clipMarkerTooltipTranscription {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  font-size: 0.76rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.72);
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* The in-progress draft: thicker, draggable, with resize handles. */
+.clipRangeBar {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 10px;
+  border-radius: 999px;
+  background: var(--clip-color, #35d0b5);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  cursor: grab;
+  z-index: 2;
+}
+
+.clipRangeBar:active {
+  cursor: grabbing;
+}
+
+.clipRangeHandle {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--mc-accent-strong, #24b89e);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  cursor: ew-resize;
+  z-index: 3;
+}
+
+.clipRangeHandle[data-side="start"] {
+  left: -6px;
+}
+
+.clipRangeHandle[data-side="end"] {
+  right: -6px;
+}
+
+/* ---- Tooltip: color picker + transcription box, floating above the draft ---- */
+
+.clipTooltip {
+  position: absolute;
+  bottom: calc(100% + 14px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 240px;
+  padding: 12px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(26, 27, 32, 0.98), rgba(18, 19, 23, 0.98));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.65);
+  cursor: default;
+  z-index: 5;
+}
+
+.clipTooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 7px solid transparent;
+  border-top-color: rgba(18, 19, 23, 0.98);
+}
+
+.clipTooltipRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.clipColorSwatch {
+  position: relative;
+  display: block;
+  width: 26px;
+  height: 26px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.clipColorSwatch input[type="color"] {
+  position: absolute;
+  inset: -4px;
+  width: calc(100% + 8px);
+  height: calc(100% + 8px);
+  border: none;
+  padding: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.clipRangeTime {
+  font-size: 0.74rem;
+  font-variant-numeric: tabular-nums;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.clipTranscriptionInput {
+  width: 100%;
+  resize: vertical;
+  min-height: 56px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: #e8e8ec;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  font-family: inherit;
+}
+
+.clipTranscriptionInput::placeholder {
+  color: rgba(255, 255, 255, 0.32);
+}
+
+.clipTranscriptionInput:focus {
+  outline: none;
+  border-color: rgba(53, 208, 181, 0.55);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.clipErrorText {
+  margin: 8px 0 0;
+  font-size: 0.72rem;
+  color: #f26d6d;
+}
+
+/* ---- Responsive ---- */
+
+@media (max-width: 900px) {
+  .editorLayout {
+    flex-direction: column;
+  }
+
+  .clipSidebar {
+    width: 100%;
+    flex: none;
+    position: static;
+    height: auto;
+    overflow: visible;
+  }
+
+  /* Below 900px the layout stacks vertically, so a narrow 52px rail would
+     just be an oddly small floating box rather than a useful collapse —
+     collapsing here only hides the card list, the row stays full width. */
+  .clipSidebarCollapsed {
+    width: 100%;
+    flex: none;
+  }
+
+  .clipSidebarScroll {
+    flex: none;
+    max-height: 60vh;
+  }
+
+  /* Full-width sidebar leaves more room — let the single carousel panel
+     breathe a little instead of staying pinned to the narrow 300px card
+     sizing. */
+  .miniStageWrap {
+    max-width: 260px;
+  }
+}
+
+@media (max-width: 640px) {
+  .masterControls {
+    padding: 4px 0 0;
+    gap: 12px;
+  }
+
+  .masterControlsRow {
+    grid-template-columns: auto 1fr auto;
+    column-gap: 10px;
+  }
+
+  .masterTransportLeft {
+    grid-column: 1;
+  }
+
+  .masterTransportRight {
+    grid-column: 3;
+  }
+
+  .masterVolumeBar {
+    width: 48px;
+  }
+
+  .clipTooltip {
+    width: 200px;
+  }
+
+  .clipMarkerTooltip {
+    width: 180px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .masterIconBtn,
+  .masterPlayBtn,
+  .masterSeekBar::-webkit-slider-thumb,
+  .masterVolumeBar::-webkit-slider-thumb,
+  .groupCard,
+  .miniStagePanel,
+  .miniNavBtn,
+  .clipMarker,
+  .clipMarkerTooltip {
+    transition: none;
+  }
+
+  .spinIcon {
+    animation: none;
+  }
+}

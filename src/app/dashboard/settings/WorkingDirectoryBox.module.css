@@ -1,0 +1,155 @@
+.folderBox {
+  align-self: flex-end;
+  width: 100%;
+  max-width: 360px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.folderLabel {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--fg-muted);
+  text-transform: uppercase;
+}
+
+.folderInputRow {
+  display: flex;
+  gap: 8px;
+}
+
+.folderInput {
+  flex: 1;
+  min-width: 0;
+  padding: 9px 11px;
+  border-radius: 8px;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--fg);
+  font-size: 0.88rem;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.folderInput:focus {
+  border-color: var(--accent);
+}
+
+.folderInput:disabled {
+  opacity: 0.75;
+  cursor: default;
+}
+
+.folderBtn {
+  padding: 0 16px;
+  border: none;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--accent-fg);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+
+.folderBtn:hover:not(:disabled) {
+  filter: brightness(1.05);
+}
+
+.folderBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.folderSavedText {
+  margin: 8px 0 0;
+  font-size: 0.78rem;
+  color: var(--fg-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.folderHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.lockBtn {
+  background: transparent;
+  border: 1px solid var(--input-border);
+  border-radius: 6px;
+  color: var(--fg-muted);
+  padding: 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.lockBtn:hover:not(:disabled) {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.lockBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.folderGhostBtn {
+  background: transparent;
+  color: var(--fg);
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  padding: 0 14px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.folderGhostBtn:hover:not(:disabled) {
+  background: var(--accent-soft);
+}
+
+.folderGhostBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.folderErrorText {
+  color: var(--error);
+  font-size: 0.8rem;
+  margin: 8px 0 0;
+}
+
+/* Locked = saved/secure state: soft green gradient wash + accent border. */
+.folderBoxLocked {
+  background: linear-gradient(
+    135deg,
+    var(--accent-soft) 0%,
+    var(--card-bg) 65%
+  );
+  border-color: var(--accent);
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+
+.folderBoxLocked .lockBtn {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Unlocked = editing: gradient drops away, back to a plain neutral card. */
+.folderBoxUnlocked {
+  background: var(--card-bg);
+  border-color: var(--card-border);
+  transition: background 0.25s ease, border-color 0.25s ease;
+}

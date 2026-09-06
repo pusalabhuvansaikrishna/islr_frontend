@@ -1,0 +1,54 @@
+.row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 4px;
+}
+
+.label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--fg);
+  flex-shrink: 0;
+}
+
+.controlWrap {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.select {
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  color: var(--fg);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+  min-width: 220px;
+  cursor: pointer;
+}
+
+.select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.status {
+  font-size: 0.78rem;
+  color: var(--fg-muted);
+}
+
+.statusSaved {
+  font-size: 0.78rem;
+  color: var(--accent);
+}
+
+.error {
+  font-size: 0.78rem;
+  color: var(--error);
+}

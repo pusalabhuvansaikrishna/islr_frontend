@@ -1,0 +1,413 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.headerControls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  flex: 1 1 auto;
+  min-width: 0;
+  justify-content: flex-end;
+}
+
+.searchInput {
+  width: 280px;
+  max-width: 100%;
+  flex: 1 1 200px;
+  min-width: 0;
+  padding: 9px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--fg);
+  font-size: 14px;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.filterToggleBtn {
+  padding: 9px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--fg);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.filterToggleBtn:hover {
+  border-color: var(--accent);
+}
+
+.filterToggleBtnActive {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.filtersPanel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: flex-end;
+  padding: 16px;
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  background: var(--card-bg);
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.filterLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--fg-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.filterInput {
+  padding: 7px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--fg);
+  font-size: 13px;
+  max-width: 100%;
+}
+
+.angleFilterOptions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.angleFilterChip {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--fg-muted);
+  cursor: pointer;
+}
+
+.angleFilterChip:hover {
+  border-color: var(--accent);
+}
+
+.angleFilterChipActive {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-fg);
+}
+
+.clearFiltersBtn {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--error);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 7px 4px;
+}
+
+.clearFiltersBtn:hover {
+  text-decoration: underline;
+}
+
+.statusText {
+  color: var(--fg-muted);
+  font-size: 14px;
+}
+
+.errorText {
+  color: var(--error);
+  font-size: 14px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+  transition: border-color 0.15s ease, transform 0.1s ease;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.cardBody {
+  padding: 20px 16px 16px;
+  background: var(--accent-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sessionPill {
+  align-self: flex-start;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--card-bg);
+  padding: 3px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.cardDate {
+  font-size: 13px;
+  color: var(--fg-muted);
+  font-weight: 500;
+}
+
+.cardFooter {
+  padding: 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 1px solid var(--card-border);
+}
+
+.cardFooterTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.takeName {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fg);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.deleteBtn {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--input-border);
+  background: transparent;
+  color: var(--error);
+  cursor: pointer;
+}
+
+.deleteBtn:hover {
+  background: var(--error);
+  border-color: var(--error);
+  color: white;
+}
+
+.confirmRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 0;
+  flex-wrap: wrap;
+}
+
+.confirmText {
+  font-size: 12px;
+  color: var(--fg);
+  font-weight: 500;
+}
+
+.confirmActions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.confirmCancelBtn,
+.confirmDeleteBtn {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.confirmCancelBtn {
+  border: 1px solid var(--input-border);
+  background: transparent;
+  color: var(--fg);
+}
+
+.confirmCancelBtn:hover:not(:disabled) {
+  background: var(--input-bg);
+}
+
+.confirmDeleteBtn {
+  border: 1px solid var(--error);
+  background: var(--error);
+  color: white;
+}
+
+.confirmDeleteBtn:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.confirmCancelBtn:disabled,
+.confirmDeleteBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.angleBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.badgeEmpty {
+  font-size: 11px;
+  color: var(--fg-muted);
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+  text-align: center;
+}
+
+.pageBtn {
+  padding: 7px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--fg);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.pageBtn:hover:not(:disabled) {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+.pageBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  font-size: 13px;
+  color: var(--fg-muted);
+}
+
+/* Tablet: stack header controls under the title, full-width search */
+@media (max-width: 700px) {
+  .page {
+    padding: 16px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .headerControls {
+    justify-content: stretch;
+  }
+
+  .searchInput {
+    flex: 1 1 100%;
+    width: auto;
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+  }
+}
+
+/* Small phones: single-column grid, tighter filters panel */
+@media (max-width: 420px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filtersPanel {
+    gap: 14px;
+    padding: 14px;
+  }
+
+  .filterGroup {
+    flex: 1 1 100%;
+  }
+
+  .angleFilterOptions {
+    width: 100%;
+  }
+}

@@ -1,0 +1,1028 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.headerControls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.searchInput {
+  width: 280px;
+  padding: 9px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--fg);
+  font-size: 14px;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.filterToggleBtn {
+  padding: 9px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--fg);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.filterToggleBtn:hover {
+  border-color: var(--accent);
+}
+
+.filterToggleBtnActive {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.filtersPanel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: flex-end;
+  padding: 16px;
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  background: var(--card-bg);
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filterLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--fg-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.filterInput {
+  padding: 7px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--fg);
+  font-size: 13px;
+}
+
+.angleFilterOptions {
+  display: flex;
+  gap: 6px;
+}
+
+.angleFilterChip {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--fg-muted);
+  cursor: pointer;
+}
+
+.angleFilterChip:hover {
+  border-color: var(--accent);
+}
+
+.angleFilterChipActive {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-fg);
+}
+
+.clearFiltersBtn {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--error);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 7px 4px;
+}
+
+.clearFiltersBtn:hover {
+  text-decoration: underline;
+}
+
+.statusText {
+  color: var(--fg-muted);
+  font-size: 14px;
+}
+
+.errorText {
+  color: var(--error);
+  font-size: 14px;
+}
+
+/* --- Take cards grid (top-level list) --- */
+
+.takeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.takeCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 18px;
+  cursor: pointer;
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.06),
+    rgba(255, 255, 255, 0.02)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 4px 18px rgba(0, 0, 0, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.takeCard:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.24),
+    0 0 0 1px var(--accent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.takeCardHeader {
+  min-width: 0;
+}
+
+.takeCardName {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--fg);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.takeCardMeta {
+  margin: 1px 0 0;
+  font-size: 11px;
+  color: var(--fg-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.takeCardFooter {
+  display: flex;
+  align-items: center;
+}
+
+.clusterCount {
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+/* Overlapping "peek inside" bubble thumbnails shown right on the take
+   card, so you can see what clusters are inside without opening it. */
+
+.bubbleStack {
+  display: flex;
+  align-items: center;
+}
+
+.bubbleThumb {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: rgba(17, 19, 24, 0.55);
+  border: 2.5px solid var(--clip-color, rgba(255, 255, 255, 0.4));
+  box-shadow: 0 0 0 2px rgba(20, 21, 26, 0.95);
+  margin-left: -12px;
+}
+
+.bubbleThumb:first-child {
+  margin-left: 0;
+}
+
+.bubbleThumb .thumbImg {
+  pointer-events: none;
+}
+
+.bubbleMore {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  flex-shrink: 0;
+  margin-left: -12px;
+  background: rgba(15, 16, 20, 0.85);
+  border: 2.5px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 0 0 2px rgba(20, 21, 26, 0.95);
+  color: var(--fg);
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bubbleEmpty {
+  font-size: 12px;
+  color: var(--fg-muted);
+}
+
+/* --- Cluster grid (inside the take modal) --- */
+
+.clusterGridModal {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 12px;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.clusterCard {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 22px;
+  overflow: hidden;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+  position: relative;
+  box-shadow:
+    0 4px 18px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.clusterCard:hover {
+  border-color: var(--clip-color, var(--accent));
+  transform: translateY(-3px) scale(1.01);
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.28),
+    0 0 0 1px var(--clip-color, var(--accent)),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+.clusterFooter {
+  padding: 10px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* --- Thumbnail area (a muted <video> seeked to a still frame) --- */
+/* Bubble treatment: the video peeks through a translucent, blurred glass
+   surface rather than sitting on an opaque background. */
+
+.thumbWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: rgba(17, 19, 24, 0.55);
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px 12px 0 0;
+  z-index: 2;
+}
+
+.thumbWrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.14) 0%,
+    rgba(255, 255, 255, 0.02) 35%,
+    rgba(255, 255, 255, 0) 60%
+  );
+  pointer-events: none;
+}
+
+.thumbWrap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 2px var(--clip-color, transparent);
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.thumbImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none; /* clicks pass through to the card, not video controls */
+}
+
+/* --- Coverflow-style 3D carousel for multi-angle cluster cards --- */
+/* Each slide's position/size comes from inline `inset` percentages (see
+   getCoverflowStyle) chosen so the whole scene always sums to 100% of the
+   stage — nothing here ever needs to spill past the card's own edges. */
+
+.coverflowStage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  perspective: 900px;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.coverflowSlide {
+  position: absolute;
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(17, 19, 24, 0.55);
+  box-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.4),
+    inset 0 0 0 2px var(--clip-color, transparent);
+  transition: inset 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease;
+}
+
+.carouselDots {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  z-index: 6;
+  pointer-events: none;
+}
+
+.carouselDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.4);
+  transition: width 0.25s ease, background 0.25s ease;
+}
+
+.carouselDotActive {
+  width: 14px;
+  background: #fff;
+}
+
+.playBadge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: rgba(15, 16, 20, 0.55);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 2px; /* optically center the play triangle */
+  backdrop-filter: blur(2px);
+  transition: transform 0.15s ease, background 0.15s ease;
+  z-index: 5;
+}
+
+.clusterCard:hover .playBadge {
+  transform: translate(-50%, -50%) scale(1.08);
+  background: var(--accent);
+}
+
+.durationBadge {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(15, 16, 20, 0.72);
+  padding: 2px 7px;
+  border-radius: 5px;
+  font-variant-numeric: tabular-nums;
+  z-index: 5;
+}
+
+.angleBadgeOnThumb {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(15, 16, 20, 0.72);
+  padding: 2px 8px;
+  border-radius: 999px;
+  z-index: 5;
+}
+
+.angleCountBadge {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(15, 16, 20, 0.72);
+  padding: 2px 8px;
+  border-radius: 999px;
+  z-index: 5;
+}
+
+.transcriptBadge {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  color: #fff;
+  background: rgba(15, 16, 20, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+/* --- Card/footer shared bits --- */
+
+.cardFooterTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.clipName {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fg);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.deleteBtn {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--input-border);
+  background: transparent;
+  color: var(--error);
+  cursor: pointer;
+}
+
+.deleteBtn:hover {
+  background: var(--error);
+  border-color: var(--error);
+  color: white;
+}
+
+.confirmRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 0;
+}
+
+.confirmText {
+  font-size: 12px;
+  color: var(--fg);
+  font-weight: 500;
+}
+
+.confirmActions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.confirmCancelBtn,
+.confirmDeleteBtn {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.confirmCancelBtn {
+  border: 1px solid var(--input-border);
+  background: transparent;
+  color: var(--fg);
+}
+
+.confirmCancelBtn:hover:not(:disabled) {
+  background: var(--input-bg);
+}
+
+.confirmDeleteBtn {
+  border: 1px solid var(--error);
+  background: var(--error);
+  color: white;
+}
+
+.confirmDeleteBtn:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.confirmCancelBtn:disabled,
+.confirmDeleteBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.pageBtn {
+  padding: 7px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--fg);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.pageBtn:hover:not(:disabled) {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+.pageBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  font-size: 13px;
+  color: var(--fg-muted);
+}
+
+/* --- Overlays shared shell (used by the take modal and clip viewer) --- */
+
+.playerOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 9, 12, 0.78);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 1000;
+  animation: overlayFadeIn 0.18s ease;
+}
+
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.panelEnter {
+  animation: panelPopIn 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes panelPopIn {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.takeModalPanel {
+  width: 100%;
+  max-width: 920px;
+  max-height: 84vh;
+  background: rgba(24, 26, 32, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 24px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+/* --- Clip viewer panel: clip list + video + transcript --- */
+
+.viewerPanel {
+  width: 100%;
+  max-width: 1240px;
+  height: 84vh;
+  background: rgba(24, 26, 32, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 24px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.viewerBody {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+.viewerClipList {
+  width: 240px;
+  flex-shrink: 0;
+  overflow-y: auto;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.viewerClipItem {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 6px;
+  border-radius: 14px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.viewerClipItem:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.viewerClipItemActive {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.viewerClipThumbWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: rgba(17, 19, 24, 0.55);
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.viewerClipPlayingBadge {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-fg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 1px;
+  z-index: 5;
+}
+
+.viewerClipMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 2px;
+}
+
+.viewerVideoCol {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  padding: 16px;
+}
+
+.viewerVideo {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.viewerTranscriptCol {
+  width: 320px;
+  flex-shrink: 0;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.transcriptHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.transcriptTitle {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--fg-muted);
+}
+
+.transcriptHeaderActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.transcriptLangChip {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.transcriptEditBtn {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--input-border);
+  background: transparent;
+  color: var(--fg);
+  cursor: pointer;
+}
+
+.transcriptEditBtn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.transcriptBody {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.transcriptText {
+  margin: 0;
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--fg);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.transcriptStatus {
+  margin: 0;
+  font-size: 13px;
+  color: var(--fg-muted);
+}
+
+.transcriptStatusError {
+  margin: 0;
+  font-size: 13px;
+  color: var(--error);
+}
+
+.transcriptEditArea {
+  flex: 1;
+  width: 100%;
+  min-height: 200px;
+  resize: none;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  background: var(--input-bg);
+  color: var(--fg);
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.6;
+  padding: 10px;
+}
+
+.transcriptEditArea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.transcriptEditFooter {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 16px 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.transcriptEditActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.transcriptSaveBtn {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+
+.transcriptSaveBtn:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.transcriptSaveBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.playerHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.playerHeaderText {
+  min-width: 0;
+}
+
+.playerTitle {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fg);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.playerSubtitle {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: var(--fg-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.playerCloseBtn {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--fg);
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.playerCloseBtn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+@media (max-width: 900px) {
+  .viewerBody {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .viewerClipList {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .viewerClipItem {
+    width: 140px;
+    flex-shrink: 0;
+  }
+
+  .viewerVideoCol {
+    padding: 12px;
+  }
+
+  .viewerVideo {
+    max-height: 42vh;
+  }
+
+  .viewerTranscriptCol {
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    max-height: 32vh;
+  }
+}
+
+@media (max-width: 640px) {
+  .playerOverlay {
+    padding: 0;
+  }
+
+  .takeModalPanel,
+  .viewerPanel {
+    max-width: none;
+    height: 100%;
+    border-radius: 0;
+  }
+
+  .takeGrid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+}

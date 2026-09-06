@@ -1,0 +1,107 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modal {
+  width: 100%;
+  max-width: 640px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  border-radius: 14px;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.filename {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fg);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.closeBtn {
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--fg-muted);
+  cursor: pointer;
+}
+
+.closeBtn:hover {
+  color: var(--fg);
+}
+
+.body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 16px 20px;
+}
+
+.transcriptText {
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: inherit;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--fg);
+  margin: 0;
+}
+
+.statusText,
+.hintText {
+  color: var(--fg-muted);
+  font-size: 13px;
+}
+
+.errorText {
+  color: var(--error);
+  font-size: 13px;
+}
+
+.footer {
+  padding: 14px 20px;
+  border-top: 1px solid var(--card-border);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.actionBtn {
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: none;
+  background: var(--accent);
+  color: var(--accent-contrast, #fff);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.actionBtn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.actionBtn:hover:not(:disabled) {
+  filter: brightness(1.05);
+}

@@ -1,0 +1,301 @@
+.stepGrid {
+  position: relative;
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 24px;
+}
+
+.previousSessionsPanel {
+  border-right: 1px solid var(--card-border);
+  padding-right: 20px;
+}
+
+.panelTitle {
+  margin: 0 0 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fg-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.previousSessionsEmpty {
+  font-size: 13px;
+  color: var(--fg-muted);
+  background: var(--input-bg);
+  border: 1px dashed var(--input-border);
+  border-radius: 8px;
+  padding: 16px 12px;
+  text-align: center;
+}
+
+.formPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.fieldRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--fg);
+}
+
+.input,
+.textarea {
+  font-size: 14px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--fg);
+  font-family: inherit;
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.textarea {
+  resize: vertical;
+}
+
+.charCount {
+  font-size: 12px;
+  color: var(--fg-muted);
+  align-self: flex-end;
+}
+
+/* Base list: grows naturally, no scrollbar, no clipping. */
+.previousSessionsList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Only applied once the session count hits SCROLL_THRESHOLD. */
+.previousSessionsListScrollable {
+  max-height: 420px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 4px;
+}
+
+.previousSessionItem {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 36px 8px 10px;
+  border-radius: 6px;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.previousSessionItem:hover {
+  border-color: var(--accent);
+}
+
+.previousSessionItem[aria-disabled="true"] {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.previousSessionItemSelected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.previousSessionName {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--fg);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-right: 4px;
+}
+
+.previousSessionMeta {
+  font-size: 11px;
+  color: var(--fg-muted);
+}
+
+.previousSessionTakes {
+  font-size: 11px;
+  color: var(--fg-muted);
+}
+
+.previousSessionDeleteBtn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  border: none;
+  background: transparent;
+  color: var(--fg-muted);
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0;
+}
+
+.previousSessionDeleteBtn:hover:not(:disabled) {
+  color: #e5484d;
+  background: rgba(229, 72, 77, 0.12);
+}
+
+.previousSessionDeleteBtn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.deleteErrorText {
+  font-size: 12px;
+  color: #e5484d;
+  margin: 0 0 8px;
+}
+
+/* Floating tooltip: positioned via inline top/left in JS (viewport
+   coordinates), so it lives outside any scrolling/clipping container. */
+.floatingTooltip {
+  position: fixed;
+  width: 220px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--input-border);
+  background: var(--card-bg, var(--input-bg));
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+}
+
+.tooltipRow {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.tooltipLabel {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--fg-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.tooltipValue {
+  font-size: 12px;
+  color: var(--fg);
+  word-break: break-word;
+}
+
+.reuseNotice {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px dashed var(--accent);
+  background: var(--accent-soft);
+  align-self: flex-start;
+}
+
+.reuseNoticeTitle {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.reuseNoticeBody {
+  margin: 0;
+  font-size: 13px;
+  color: var(--fg-muted);
+}
+
+.reuseNoticeClear {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 13px;
+  color: var(--accent);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.searchWrapper {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted, #888);
+  display: flex;
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 8px 32px 8px 32px;
+  border: 1px solid var(--border-color, #ddd);
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: var(--accent-color, #4a90d9);
+}
+
+.searchClearBtn {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--text-muted, #888);
+  padding: 2px 6px;
+}
+
+.searchClearBtn:hover {
+  color: var(--text-color, #333);
+}
