@@ -5,7 +5,7 @@ import styles from "./ClipDetailModal.module.css";
 import {
   type ClipGroup,
   type ClipGroupAngle,
-  type ClipItem,
+  type ClipSummary,
   type KnownAngle,
   buildGroupAngleSlots,
   formatTime,
@@ -17,7 +17,12 @@ interface ClipDetailModalProps {
   group: ClipGroup | null;
   onClose: () => void;
   viewAngleIds?: Partial<Record<KnownAngle, string>>;
-  onClipUploaded?: (clipGroupId: string, angle: KnownAngle, clip: ClipItem) => void;
+  onClipUploaded?: (clipGroupId: string, angle: KnownAngle, clip: ClipSummary) => void;
+  // page.tsx wires this up to remove the deleted angle's clip from local
+  // state, but this modal doesn't yet render a delete control anywhere —
+  // declared here so the prop type-checks; wire up an actual delete
+  // button in this file if/when that UI is added.
+  onClipDeleted?: (clipGroupId: string, angle: KnownAngle) => void;
 }
 
 type AngleStatus = { uploading: boolean };
@@ -140,6 +145,7 @@ export default function ClipDetailModal({
   onClose,
   viewAngleIds = {},
   onClipUploaded,
+  onClipDeleted, // eslint-disable-line @typescript-eslint/no-unused-vars -- not wired to a UI control yet
 }: ClipDetailModalProps) {
   const closeBtnRef = useRef<HTMLButtonElement | null>(null);
   const [statusByAngle, setStatusByAngle] = useState<Record<string, AngleStatus>>({});
@@ -245,7 +251,7 @@ export default function ClipDetailModal({
         throw new Error(detail?.detail || `Upload failed (${res.status})`);
       }
 
-      const clip: ClipItem = await res.json();
+      const clip: ClipSummary = await res.json();
       setStatus(angle, { uploading: false });
       onClipUploaded?.(clipGroupId, angle, clip);
     } catch (err) {
