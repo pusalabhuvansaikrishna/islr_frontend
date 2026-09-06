@@ -5,7 +5,7 @@ import styles from "./ClipDetailModal.module.css";
 import {
   type ClipGroup,
   type ClipGroupAngle,
-  type ClipItem,
+  type ClipSummary,
   type KnownAngle,
   buildGroupAngleSlots,
   formatTime,
@@ -17,7 +17,7 @@ interface ClipDetailModalProps {
   group: ClipGroup | null;
   onClose: () => void;
   viewAngleIds?: Partial<Record<KnownAngle, string>>;
-  onClipUploaded?: (clipGroupId: string, angle: KnownAngle, clip: ClipItem) => void;
+  onClipUploaded?: (clipGroupId: string, angle: KnownAngle, clip: ClipSummary) => void;
 }
 
 type AngleStatus = { uploading: boolean };
@@ -236,7 +236,7 @@ export default function ClipDetailModal({
         throw new Error(detail?.detail || `Upload failed (${res.status})`);
       }
 
-      const clip: ClipItem = await res.json();
+      const clip: ClipSummary = await res.json();
       setStatus(angle, { uploading: false });
       onClipUploaded?.(group.clip_group_id, angle, clip);
     } catch (err) {
