@@ -5,7 +5,7 @@ import styles from "./ClipDetailModal.module.css";
 import {
   type ClipGroup,
   type ClipGroupAngle,
-  type ClipSummary,
+  type ClipItem,
   type KnownAngle,
   buildGroupAngleSlots,
   formatTime,
@@ -17,7 +17,7 @@ interface ClipDetailModalProps {
   group: ClipGroup | null;
   onClose: () => void;
   viewAngleIds?: Partial<Record<KnownAngle, string>>;
-  onClipUploaded?: (clipGroupId: string, angle: KnownAngle, clip: ClipSummary) => void;
+  onClipUploaded?: (clipGroupId: string, angle: KnownAngle, clip: ClipItem) => void;
 }
 
 type AngleStatus = { uploading: boolean };
@@ -196,6 +196,15 @@ export default function ClipDetailModal({
       return;
     }
 
+    // clip_group_id can be null on the ClipGroup type (e.g. an
+    // unpersisted/placeholder group). Bail out before doing any work if
+    // it's missing, same as the viewAngleId guard above.
+    const clipGroupId = group.clip_group_id;
+    if (!clipGroupId) {
+      pushError(angle, "This clip group hasn't been saved yet, so it has no id to upload against.");
+      return;
+    }
+
     // Instant client-side duration check — avoids an upload round trip
     // for the common case of picking a wrong-length file. The backend
     // still re-validates via ffprobe as the source of truth.
@@ -223,7 +232,7 @@ export default function ClipDetailModal({
       formData.append("file", file);
 
       const res = await fetch(
-        `/clip-groups/${group.clip_group_id}/angles/${viewAngleId}/video`,
+        `/clip-groups/${clipGroupId}/angles/${viewAngleId}/video`,
         {
           method: "POST",
           body: formData,
@@ -236,9 +245,9 @@ export default function ClipDetailModal({
         throw new Error(detail?.detail || `Upload failed (${res.status})`);
       }
 
-      const clip: ClipSummary = await res.json();
+      const clip: ClipItem = await res.json();
       setStatus(angle, { uploading: false });
-      onClipUploaded?.(group.clip_group_id, angle, clip);
+      onClipUploaded?.(clipGroupId, angle, clip);
     } catch (err) {
       setStatus(angle, { uploading: false });
       pushError(angle, err instanceof Error ? err.message : "Upload failed.");
