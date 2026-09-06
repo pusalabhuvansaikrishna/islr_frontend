@@ -142,6 +142,7 @@ export default function ClipsPage() {
                   <div className={styles.bubbleStack}>
                     {previewClusters.map((cluster, i) => {
                       const first = cluster.clips[0];
+                      if (!first) return null;
                       const displayName = first.label || first.filename;
                       return (
                         <div
