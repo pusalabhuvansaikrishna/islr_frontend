@@ -980,14 +980,20 @@ export default function ClipEditorPage() {
 
       const result: ClipCreateForTakeResponse = await res.json();
 
-      if (result.clips.length > 0) {
+      // Guard against an empty clips array before indexing into it —
+      // result.clips[0] is typed as ClipSummary | undefined by
+      // TypeScript's noUncheckedIndexedAccess-style narrowing, and
+      // asserting it away would also mask a real bug (e.g. the backend
+      // reporting success with zero clips actually cut).
+      const firstClip = result.clips[0];
+      if (firstClip) {
         // Rebuild the group client-side: every clip in a single create
         // response shares one clip_group_id (or none, if the backend
         // didn't set one), and each clip's angle is looked up from the
         // take's raw videos rather than trusted to any local guess.
         const angleByRawVideoId = new Map(take.raw_videos.map((rv) => [rv.raw_video_id, rv.angle]));
         const newGroup: ClipGroup = {
-          clip_group_id: result.clips[0].clip_group_id,
+          clip_group_id: firstClip.clip_group_id,
           start_time_seconds: clipDraft.start,
           end_time_seconds: clipDraft.end,
           color: clipDraft.color,
