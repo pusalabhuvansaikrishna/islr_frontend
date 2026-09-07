@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import styles from "./page.module.css";
 import CountdownOverlay from "@/components/CountdownOverlay";
@@ -34,7 +34,7 @@ const DEFAULT_SPEED = 28; // px/sec, matches teleprompter popup's default
 const MIN_SPEED = 8;
 const MAX_SPEED = 80;
 
-export default function RecordPage() {
+function RecordPageInner() {
   const searchParams = useSearchParams();
   const takeId = searchParams.get("takeId") ?? "unassigned";
   const transcriptionFileId = searchParams.get("transcriptionFileId");
@@ -479,5 +479,13 @@ export default function RecordPage() {
         )}
       </section>
     </div>
+  );
+}
+
+export default function RecordPage() {
+  return (
+    <Suspense fallback={<div className={styles.page} />}>
+      <RecordPageInner />
+    </Suspense>
   );
 }
