@@ -1374,7 +1374,12 @@ export default function ClipEditorPage() {
   }, []);
 
   const handleSeekCommit = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLInputElement>) => {
+    (
+      e:
+        | React.ChangeEvent<HTMLInputElement>
+        | React.MouseEvent<HTMLInputElement>
+        | React.TouchEvent<HTMLInputElement>
+    ) => {
       seekAllTo(Number((e.target as HTMLInputElement).value));
       setIsSeeking(false);
       // Manually scrubbing the seek bar steps outside whatever clip-only
