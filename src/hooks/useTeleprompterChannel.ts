@@ -10,10 +10,16 @@ export type RecordingPhase = "idle" | "countdown" | "recording" | "stopped";
 export type PrompterMessage =
   | { type: "phase"; phase: RecordingPhase; countdownValue?: number }
   | { type: "script"; text: string }
-  | { type: "control"; action: "setSpeed" | "jumpToStart"; speed?: number }
+  | { type: "control"; action: "setSpeed"; speed: number }
+  | { type: "control"; action: "setFontSize"; fontSize: number }
+  | { type: "control"; action: "jumpToStart" }
   // Sent FROM the teleprompter window so the main tab's monitor panel
   // can mirror what the presenter is currently seeing.
   | { type: "scrollStatus"; lineIndex: number; totalLines: number }
+  // Sent FROM the teleprompter window whenever its own size or effective
+  // font size changes (e.g. moved to another display), so the main tab's
+  // mini preview can mirror it proportionally instead of guessing.
+  | { type: "windowInfo"; innerWidth: number; innerHeight: number; effectiveFontSize: number }
   | { type: "windowReady" };
 
 // One channel per take, so leaving multiple record tabs open (e.g. across
