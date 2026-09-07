@@ -179,6 +179,20 @@ export default function NewRecordingSessionModal({
   const isReusingSession = Boolean(formData.selectedSessionId);
   const isTranscriptionFlow = flow === "transcriptions";
 
+  // Defensive: currentStepIndex is separate state from STEPS (which is
+  // derived from the `flow` prop via useMemo), so if `flow` ever changed
+  // while the modal stayed mounted, or the index otherwise fell out of
+  // range, STEPS[currentStepIndex] really could be undefined at runtime
+  // (not just a type-checker technicality). Snap back to the first step
+  // instead of crashing.
+  useEffect(() => {
+    if (!currentStep) setCurrentStepIndex(0);
+  }, [currentStep]);
+
+  if (!currentStep) {
+    return null;
+  }
+
   const handleFormChange = (data: Partial<SessionFormData>) => {
     setFormData((prev) => ({ ...prev, ...data }));
   };
