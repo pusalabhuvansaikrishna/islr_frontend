@@ -747,8 +747,19 @@ export default function TakeDetailPage() {
     setCurrentTime(value);
   }, []);
 
+  // Fires on both onMouseUp and onTouchEnd for the master seek bar, so its
+  // parameter type has to cover a MouseEvent and a TouchEvent (plus
+  // ChangeEvent, kept for compatibility even though onChange itself calls
+  // handleSeekChange instead). Only `e.target.value` is actually read,
+  // which exists on all three event shapes, so widening the type here is
+  // safe and doesn't change behavior.
   const handleSeekCommit = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLInputElement>) => {
+    (
+      e:
+        | React.ChangeEvent<HTMLInputElement>
+        | React.MouseEvent<HTMLInputElement>
+        | React.TouchEvent<HTMLInputElement>
+    ) => {
       const value = Number((e.target as HTMLInputElement).value);
       forEachVideo((v) => {
         v.currentTime = value;
