@@ -1448,14 +1448,20 @@ export default function ClipEditorPage() {
   // that angle. Clicking the panel highlights the group (for the card +
   // timeline marker) but deliberately never seeks the master player — see
   // handleHighlightGroup.
-  const renderActiveAnglePanel = (group: ClipGroup, entry: CarouselAngleEntry) => {
-    if (!entry.groupAngle) {
+  const renderActiveAnglePanel = (group: ClipGroup, entry: CarouselAngleEntry | undefined) => {
+    // entry is undefined only if carouselEntries was somehow empty (it
+    // never should be — buildCarouselEntries always seeds the three known
+    // slots — but array indexing is typed as possibly-undefined, so this
+    // guard satisfies that rather than asserting it away). Falls back to
+    // the same empty-placeholder treatment as a known slot with no clip.
+    if (!entry || !entry.groupAngle) {
+      const label = entry?.label ?? "angle";
       return (
         <div className={`${styles.miniStagePanel} ${styles.miniStagePanelEmpty}`}>
           <div className={styles.miniVideoStage}>
-            <span className={styles.miniEmptyText}>No {entry.label}</span>
+            <span className={styles.miniEmptyText}>No {label}</span>
           </div>
-          <span className={styles.miniAngleLabel}>{entry.label}</span>
+          <span className={styles.miniAngleLabel}>{label}</span>
         </div>
       );
     }
