@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import styles from "./page.module.css";
 import {
@@ -29,7 +29,7 @@ function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
 }
 
-export default function TeleprompterPage() {
+function TeleprompterPageInner() {
   const searchParams = useSearchParams();
   const takeId = searchParams.get("takeId") ?? "unassigned";
 
@@ -198,5 +198,13 @@ export default function TeleprompterPage() {
       </div>
       <div className={styles.statusBar}>{phase}</div>
     </div>
+  );
+}
+
+export default function TeleprompterPage() {
+  return (
+    <Suspense fallback={<div className={styles.page} />}>
+      <TeleprompterPageInner />
+    </Suspense>
   );
 }
